@@ -1,5 +1,6 @@
 {
     "name": "RFID MFRC-522 by RABS",
+    "version": "1.0.0",
     "description": "RFID MFRC-522 or RC-522 library for BBC micro:bit using SPI communication.",
     "dependencies": {
         "core": "*"
