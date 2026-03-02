@@ -1,6 +1,6 @@
 {
-    "name": "RFID",
-    "description": "",
+    "name": "RFID MFRC-522 by RABS",
+    "description": "RFID MFRC-522 or RC-522 library for BBC micro:bit using SPI communication.",
     "dependencies": {
         "core": "*"
     },
