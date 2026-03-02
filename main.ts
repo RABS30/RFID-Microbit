@@ -1,7 +1,7 @@
 /**
   * MFRC522 Block
   */
-//% color="#275C6B" weight=100 icon="\uf2bb" block="MFRC522 RFID"
+//% color="#275C6B" weight=100 icon="\uf2bb" block="RFID - MFRC522"
 namespace MFRC522 {
     let Type2 = 0
     const BlockAdr: number[] = [8, 9, 10]
@@ -32,6 +32,7 @@ namespace MFRC522 {
     let PCD_TRANSCEIVE = 0x0C
     let PICC_REQIDL = 0x26
     let PICC_AUTHENT1A = 0x60
+    let SDA_PIN = DigitalPin.P15
 
     let ComIrqReg = 0x04
     let DivIrqReg = 0x05
@@ -46,10 +47,10 @@ namespace MFRC522 {
     }
 
     function SPI_Write(adr: number, val: number) {
-        pins.digitalWritePin(DigitalPin.P11, 0)
+        pins.digitalWritePin(SDA_PIN, 0)
         pins.spiWrite((adr << 1) & 0x7E)
         pins.spiWrite(val)
-        pins.digitalWritePin(DigitalPin.P11, 1)
+        pins.digitalWritePin(SDA_PIN, 1)
     }
 
     function readFromCard(): string {
@@ -88,10 +89,10 @@ namespace MFRC522 {
     }
 
     function SPI_Read(adr: number) {
-        pins.digitalWritePin(DigitalPin.P11, 0)
+        pins.digitalWritePin(SDA_PIN, 0)
         pins.spiWrite(((adr << 1) & 0x7E) | 0x80)
         val = pins.spiWrite(0)
-        pins.digitalWritePin(DigitalPin.P11, 1)
+        pins.digitalWritePin(SDA_PIN, 1)
         return val
     }
 
@@ -413,12 +414,13 @@ namespace MFRC522 {
     /*
      * Initial setup
      */
-    //% block="Initialize MFRC522 Module"
+    //% block="Initialize MFRC522 Module MOSI=P15, MISO=P14, SCK=P13, SDA %sdaPin"
     //% weight=100
-    export function Init() {
+    export function Init(sdaPin: DigitalPin) {
         pins.spiPins(DigitalPin.P15, DigitalPin.P14, DigitalPin.P13)
         pins.spiFormat(8, 0)
-        pins.digitalWritePin(DigitalPin.P11, 1)
+        pins.digitalWritePin(sdaPin, 1)
+        SDA_PIN = sdaPin
 
         // reset module
         SPI_Write(CommandReg, PCD_RESETPHASE)
